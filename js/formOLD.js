@@ -38,14 +38,6 @@ function validateForm(){
 
     }
 
-      
-    if($("#myform").hasClass("is-invalid")){
-        alert ("Username is already exist");
-        return false;
-    }
-
-
-
 
     //valido password
     var password1 = $('#password').val().trim();
@@ -61,6 +53,11 @@ function validateForm(){
     var email = $('#email').val().trim();
     if(!validateEmail(email)){
         return false;
+    }
+
+    if($("#myform").hasClass("is-invalid")){
+            alert ("Username is already exist");
+            return false;
     }
 
 
@@ -79,15 +76,15 @@ $("#myform").submit(function(e){
 });
 
 //richiamo
-/*$('#username').on('blur',function(){
+$('#username').on('blur',function(){
 
     var el = $(this),
         form = $(#myform);
 
     $.ajax({
+        type: 'POST',
         url: "username.php",
-        method: "post",
-        data: {username:  $(this).val()
+        data: {username:  username
         },
         success: function(result) {
             if(result.valid){
@@ -100,6 +97,40 @@ $("#myform").submit(function(e){
         },
         dataType: "json"
     });
-});*/
+});
+
+
+
+$(#email).on('input', function (){
+    var email = $(this).val().trim();
+    var el = $(this);
+
+    if(validateEmail(email)) {
+        
+        $.post('email.php',
+                {
+                    email: email
+                }
+                function(data){
+
+                    if(!data.valid){
+                        el.removeClass('is-valid');
+                        el.addClass('is-invalid');
+                    } else {
+                        el.removeClass('is-invalid');
+                        el.addClass('is-valid');
+                    }
+
+                },
+                'json'
+            );
+
+        }else{
+            el.removeClass('is-invalid');
+            el.addClass('is-valid');        
+        }
+
+
+    });
 
 

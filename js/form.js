@@ -2,7 +2,8 @@
 //validare email
 function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
+    return re.test(String(email).toLowerCase());  
+    
 }
 
 
@@ -34,10 +35,9 @@ function validateForm(){
     var username = $('#username').val().trim();
     if(username.length < 7 || username.length > 20 ){
         $('#username').addClass('is-invalid');
-
         return false;
 
-    }else{
+    }/*else{
         var exists = $.ajax({
             url: "username.php",
             method: "post",
@@ -53,7 +53,7 @@ function validateForm(){
         if(exists) {
             return false;
         }
-    }
+    }*/
 
       
     
@@ -70,11 +70,11 @@ function validateForm(){
         return false;
     }
 
-    if ((password1.match(/[A-Z]/) && password1.match(/[a-z]/) && password1.match(/[0-9]/))) {
+    /*if ((password1.match(/[A-Z]/) && password1.match(/[a-z]/) && password1.match(/[0-9]/))) {
         return true;
         }else{
             return false;   
-        }
+        }*/
 
 
     //valido email
@@ -83,32 +83,14 @@ function validateForm(){
         return false;
     }
 
+    if($("#myform").hasClass("is-invalid")){
+        alert ("Username is already exist");
+        return false;
+    }
+
 
     return true;
 }
-
-
-
-//richiamo
-/*$('#username').on('blur',function(){
-
-    var el = $(this);
-
-    $.ajax({
-        url: "username.php",
-        method: "post",
-        data: {username: username},
-        success: function(data) {
-            if(data.valid){
-                el.removeClass("is-invalid").addClass("is-valid");
-            }else{
-                el.removeClass("is-valid").addClass("is-invalid")
-            }
-        },
-        dataType: "json"
-    });
-});*/
-
 
 
 
@@ -120,3 +102,36 @@ $("#myform").submit(function(e){
     }
  
 });
+
+
+$(#email).on('input', function (){
+    var email = $(this).val().trim();
+    var el = $(this);
+
+    if(validateEmail(email)) {
+        
+        $.post('email.php',
+                {
+                    email: email
+                }
+                function(data){
+
+                    if(!data.valid){
+                        el.removeClass('is-valid');
+                        el.addClass('is-invalid');
+                    } else {
+                        el.removeClass('is-invalid');
+                        el.addClass('is-valid');
+                    }
+
+                },
+                'json'
+            );
+
+        }else{
+            el.removeClass('is-invalid');
+            el.addClass('is-valid');        
+        }
+
+
+    });
