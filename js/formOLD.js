@@ -1,4 +1,8 @@
 
+
+
+
+
 //validare email
 function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -55,9 +59,9 @@ function validateForm(){
         return false;
     }
 
-    if($("#myform").hasClass("is-invalid")){
-            alert ("Username is already exist");
-            return false;
+    if($('#myform').hasClass("is-invalid")){
+        alert ("Username is already exist");
+        return false;
     }
 
 
@@ -65,15 +69,7 @@ function validateForm(){
 }
 
 
-//1) al submit del form, attivo la funzione
-$("#myform").submit(function(e){
 
-
-    if (!validateForm()){
-        e.preventDefault();
-    }
- 
-});
 
 //richiamo
 $("#username").on('blur',function(){
@@ -101,36 +97,65 @@ $("#username").on('blur',function(){
 
 
 
-$("#email").on('input', function (){
-    var email = $(this).val().trim();
-    var el = $(this);
 
-    if(validateEmail(email)) {
-        
-        $.post('email.php',
+// decido che non sto attendendo
+var richiestaPendente = false;
+
+//valido email
+$('#email').on('input', function (){
+
+    var email = $(this).val().trim();
+    var el2 = $(this);
+
+
+    if(!richiestaPendente){
+
+
+        if(validateEmail(email)) {
+            
+            $.post('email.php',
                 {
                     email: email
                 },
                 function(data){
 
                     if(!data.valid){
-                        el.removeClass('is-valid');
-                        el.addClass('is-invalid');
+                        el2.removeClass('is-valid');
+                        el2.addClass('is-invalid');
                     } else {
-                        el.removeClass('is-invalid');
-                        el.addClass('is-valid');
+                        el2.removeClass('is-invalid');
+                        el2.addClass('is-valid');
                     }
+
+                    richiestaPendente = false; //function è l'ultima che ottengo, perchè mi viene data la risposta dal server. quando ho le risposte, posso darlo in false
 
                 },
                 'json'
             );
 
         }else{
-            el.removeClass('is-invalid');
-            el.addClass('is-valid');        
-        }
+            el2.removeClass('is-invalid');
+            el2.addClass('is-valid');        
+        }     
 
 
-    });
+    richiestaPendente = true; //qui sto aspettando la risposta dal server
+    }
 
 
+});
+
+
+
+
+
+    
+//1) al submit del form, attivo la funzione
+$("#myform").submit(function(e){
+
+
+    if (!validateForm()){
+        e.preventDefault();
+    }
+ 
+});
