@@ -104,7 +104,7 @@ $("#myform").submit(function(e){
 });
 
 
-$(#email).on('input', function (){
+$('#email').on('input', function (){
     var email = $(this).val().trim();
     var el = $(this);
 
@@ -113,7 +113,7 @@ $(#email).on('input', function (){
         $.post('email.php',
                 {
                     email: email
-                }
+                },
                 function(data){
 
                     if(!data.valid){

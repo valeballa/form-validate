@@ -76,10 +76,10 @@ $("#myform").submit(function(e){
 });
 
 //richiamo
-$('#username').on('blur',function(){
+$("#username").on('blur',function(){
 
     var el = $(this),
-        form = $(#myform);
+        form = $("#myform");
 
     $.ajax({
         type: 'POST',
@@ -101,7 +101,7 @@ $('#username').on('blur',function(){
 
 
 
-$(#email).on('input', function (){
+$("#email").on('input', function (){
     var email = $(this).val().trim();
     var el = $(this);
 
@@ -110,7 +110,7 @@ $(#email).on('input', function (){
         $.post('email.php',
                 {
                     email: email
-                }
+                },
                 function(data){
 
                     if(!data.valid){
